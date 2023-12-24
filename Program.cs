@@ -13,14 +13,14 @@ namespace CsvSerialization
                 Separator = ';'
             };
             string csv = string.Empty;
-            var stopwatch = new Stopwatch();
             int iterCount = 10000;
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             for (int i = 0; i < iterCount; i++)
             {
-                stopwatch.Start();
                 csv = CsvSerializer<F>.Serialize(data, optCsv);
-                stopwatch.Stop();
             }
+            stopwatch.Stop();
             Console.WriteLine($"CSV result string:{Environment.NewLine}{csv}");
             Console.WriteLine($"CSV serialization time: {stopwatch.ElapsedMilliseconds}");
 
@@ -30,13 +30,13 @@ namespace CsvSerialization
                 IncludeFields = true
             };
             stopwatch.Reset();
+            stopwatch.Start();
             string json = string.Empty;
             for (int i = 0; i < iterCount; i++)
             {
-                stopwatch.Start();
                 json = JsonSerializer.Serialize(data, optJson);
-                stopwatch.Stop();
             }
+            stopwatch.Stop();
             Console.WriteLine($"JSON result string:{Environment.NewLine}{json}");
             Console.WriteLine($"JSON serialization time: {stopwatch.ElapsedMilliseconds}");
 
@@ -44,24 +44,24 @@ namespace CsvSerialization
             File.WriteAllText(csvFileName, csv);
             string csvFileContent = File.ReadAllText(csvFileName);
             stopwatch.Reset();
+            stopwatch.Start();
             for (int i = 0; i < iterCount; i++)
             {
-                stopwatch.Start();
                 F after = CsvSerializer<F>.Deserialize(csvFileContent, optCsv);
-                stopwatch.Stop();
             }
+            stopwatch.Stop();
             Console.WriteLine($"CSV deserialization time: {stopwatch.ElapsedMilliseconds}");
 
             string jsonFileName = "result.json";
             File.WriteAllText(jsonFileName, json);
             string jsonFileContent = File.ReadAllText(jsonFileName);
             stopwatch.Reset();
+            stopwatch.Start();
             for (int i = 0; i < iterCount; i++)
             {
-                stopwatch.Start();
                 F? after = JsonSerializer.Deserialize<F>(jsonFileContent, optJson);
-                stopwatch.Stop();
             }
+            stopwatch.Stop();
             Console.WriteLine($"JSON deserialization time: {stopwatch.ElapsedMilliseconds}");
         }
     }
